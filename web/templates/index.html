@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MiniMacro · SPCC Macroprocessor</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">›_</span>
+        <span class="brand-name">MiniMacro</span>
+        <span class="brand-tag">SPCC two-pass macroprocessor</span>
+      </div>
+      <div class="actions">
+        <button class="btn btn-ghost" data-sample="sample">Load Sample</button>
+        <button class="btn btn-ghost" data-sample="errors">Load Errors</button>
+        <button class="btn btn-ghost" id="clear-btn">Clear</button>
+        <button class="btn btn-primary" id="process-btn">
+          <span class="btn-icon">▶</span>
+          <span>Process</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="pane pane-editor">
+        <div class="pane-head">
+          <span class="pane-title">SOURCE</span>
+          <span class="pane-meta" id="source-meta">0 lines</span>
+        </div>
+        <div class="pane-body">
+          <textarea id="editor"></textarea>
+        </div>
+      </section>
+
+      <section class="pane pane-output">
+        <nav class="tabs" id="tabs">
+          <button class="tab is-active" data-tab="mnt">MNT</button>
+          <button class="tab" data-tab="mdt">MDT</button>
+          <button class="tab" data-tab="kpdtab">KPDTAB</button>
+          <button class="tab" data-tab="ala">ALA</button>
+          <button class="tab" data-tab="intermediate">Intermediate</button>
+          <button class="tab" data-tab="expanded">Expanded</button>
+          <button class="tab" data-tab="errors">
+            Errors <span class="badge" id="errors-badge">0</span>
+          </button>
+        </nav>
+
+        <div class="pane-body">
+          <div class="panel is-active" data-panel="mnt">
+            <table class="data-table">
+              <thead>
+                <tr><th>#</th><th>Name</th><th>#PP</th><th>#KP</th><th>MDT#</th><th>KPDT#</th><th>ALA#</th></tr>
+              </thead>
+              <tbody id="mnt-body"></tbody>
+            </table>
+            <div class="empty" data-empty="mnt">No macros defined.</div>
+          </div>
+
+          <div class="panel" data-panel="mdt">
+            <table class="data-table">
+              <thead><tr><th>#</th><th>Body line</th></tr></thead>
+              <tbody id="mdt-body"></tbody>
+            </table>
+            <div class="empty" data-empty="mdt">MDT is empty.</div>
+          </div>
+
+          <div class="panel" data-panel="kpdtab">
+            <table class="data-table">
+              <thead><tr><th>#</th><th>Name</th><th>Default</th></tr></thead>
+              <tbody id="kpdtab-body"></tbody>
+            </table>
+            <div class="empty" data-empty="kpdtab">No keyword parameters.</div>
+          </div>
+
+          <div class="panel" data-panel="ala">
+            <table class="data-table">
+              <thead><tr><th>#</th><th>Formal</th><th>Actual</th></tr></thead>
+              <tbody id="ala-body"></tbody>
+            </table>
+            <div class="empty" data-empty="ala">ALA is empty.</div>
+          </div>
+
+          <div class="panel" data-panel="intermediate">
+            <pre class="code-block" id="intermediate-body"></pre>
+            <div class="empty" data-empty="intermediate">No intermediate code.</div>
+          </div>
+
+          <div class="panel" data-panel="expanded">
+            <pre class="code-block" id="expanded-body"></pre>
+            <div class="empty" data-empty="expanded">No expansions yet.</div>
+          </div>
+
+          <div class="panel" data-panel="errors">
+            <ul class="errors-list" id="errors-body"></ul>
+            <div class="empty" data-empty="errors">No errors. Clean run.</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="statusbar">
+      <span class="status-dot" id="status-dot"></span>
+      <span id="status-text">Ready</span>
+      <span class="spacer"></span>
+      <span class="muted">Stage 1 · MACRO / MEND · positional + keyword args</span>
+    </footer>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/mode/simple.min.js"></script>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

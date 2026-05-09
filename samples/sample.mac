@@ -1,0 +1,22 @@
+; MiniMacro sample: two macro definitions + three calls.
+; Demonstrates positional args, keyword args with defaults, and override.
+
+MACRO
+INCR &X, &Y, &OP=ADD
+MOV AREG, &X
+&OP AREG, &Y
+MOV &X, AREG
+MEND
+
+MACRO
+DECR &A, &B
+MOV AREG, &A
+SUB AREG, &B
+MOV &A, AREG
+MEND
+
+START
+INCR P, Q
+INCR R, S, OP=SUB
+DECR M, N
+END

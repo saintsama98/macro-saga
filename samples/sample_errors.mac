@@ -1,0 +1,19 @@
+; Error-case sample: each call triggers a different diagnostic.
+
+MACRO
+ADD3 &A, &B, &C
+ADD AREG, &A
+ADD AREG, &B
+ADD AREG, &C
+MEND
+
+MACRO
+SCALE &X, &K=2
+MUL &X, &K
+MEND
+
+START
+ADD3 P, Q              ; too few positional args
+ADD3 P, Q, R, S        ; too many positional args
+SCALE V, BAD=ZZZ       ; unknown keyword
+END
